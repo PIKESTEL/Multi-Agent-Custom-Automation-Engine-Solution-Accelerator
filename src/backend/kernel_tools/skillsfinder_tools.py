@@ -1,0 +1,180 @@
+import inspect
+from typing import Callable, Annotated, List, get_type_hints
+import json
+
+from semantic_kernel.functions import kernel_function
+from models.messages_kernel import AgentType
+
+
+class SkillsfinderTools:
+    # Define Skillsfinder tools (functions)
+    formatting_instructions = "Instructions: returning the output of this function call verbatim to the user in markdown. Then write AGENT SUMMARY: and then include a summary of what you did."
+    agent_name = AgentType.SKILLSFINDER.value
+
+    @staticmethod
+    @kernel_function(
+        description="Get all skills and expertises of all technicians.",
+    )
+    async def get_technician_skills() -> str:
+        # This is a placeholder function, for a proper Azure AI Search RAG process.
+
+        """Get information about the employees that are technicians, and for each of the technicians the unique skills and expertise they have."""
+        skills_info = """
+
+        # Employees that are Technicians
+
+        ## Homer Simpson
+        - **Skills**: Electrical Systems, HVAC, Plumbing
+        - **Experience**: 10 years in residential and commercial maintenance
+        - **Certifications**: Certified Electrician, HVAC Technician
+
+        ## Lisa Simpson
+        - **Skills**: Network Administration, Cybersecurity, Cloud Computing
+        - **Experience**: 7 years in IT infrastructure and security
+        - **Certifications**: CompTIA Security+, AWS Certified Solutions Architect
+
+        ## Bart Simpson
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Experience**: 5 years in automotive and industrial equipment repair
+        - **Certifications**: ASE Certified, Certified Welder
+
+        ## Marge Simpson
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Experience**: 5 years in automotive and industrial equipment repair
+        - **Certifications**: ASE Certified, Certified Welder
+
+        ## Maggie Simpson
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Experience**: 5 years in automotive and industrial equipment repair
+        - **Certifications**: ASE Certified, Certified Welder
+
+        ## Ned Flanders
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Experience**: 5 years in automotive and industrial equipment repair
+        - **Certifications**: ASE Certified, Certified Welder
+
+        ## Mr. Burns
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Experience**: 5 years in automotive and industrial equipment repair
+        - **Certifications**: ASE Certified, Certified Welder
+
+        ## Smithers
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Experience**: 5 years in automotive and industrial equipment repair
+        - **Certifications**: ASE Certified, Certified Welder
+
+        """
+        return f"Here is information to relay back to the user. Repeat back all the relevant sections that the user asked for: {product_info}."
+
+
+    @classmethod
+    def generate_tools_json_doc(cls) -> str:
+        """
+        Generate a JSON document containing information about all methods in the class.
+
+        Returns:
+            str: JSON string containing the methods' information
+        """
+
+        tools_list = []
+
+        # Get all methods from the class that have the kernel_function annotation
+        for name, method in inspect.getmembers(cls, predicate=inspect.isfunction):
+            # Skip this method itself and any private methods
+            if name.startswith("_") or name == "generate_tools_json_doc":
+                continue
+
+            # Check if the method has the kernel_function annotation
+            if hasattr(method, "__kernel_function__"):
+                # Get method description from docstring or kernel_function description
+                description = ""
+                if hasattr(method, "__doc__") and method.__doc__:
+                    description = method.__doc__.strip()
+
+                # Get kernel_function description if available
+                if hasattr(method, "__kernel_function__") and getattr(
+                    method.__kernel_function__, "description", None
+                ):
+                    description = method.__kernel_function__.description
+
+                # Get argument information by introspection
+                sig = inspect.signature(method)
+                args_dict = {}
+
+                # Get type hints if available
+                type_hints = get_type_hints(method)
+
+                # Process parameters
+                for param_name, param in sig.parameters.items():
+                    # Skip first parameter 'cls' for class methods (though we're using staticmethod now)
+                    if param_name in ["cls", "self"]:
+                        continue
+
+                    # Get parameter type
+                    param_type = "string"  # Default type
+                    if param_name in type_hints:
+                        type_obj = type_hints[param_name]
+                        # Convert type to string representation
+                        if hasattr(type_obj, "__name__"):
+                            param_type = type_obj.__name__.lower()
+                        else:
+                            # Handle complex types like List, Dict, etc.
+                            param_type = str(type_obj).lower()
+                            if "int" in param_type:
+                                param_type = "int"
+                            elif "float" in param_type:
+                                param_type = "float"
+                            elif "bool" in param_type:
+                                param_type = "boolean"
+                            else:
+                                param_type = "string"
+
+                    # Create parameter description
+                    # param_desc = param_name.replace("_", " ")
+                    args_dict[param_name] = {
+                        "description": param_name,
+                        "title": param_name.replace("_", " ").title(),
+                        "type": param_type,
+                    }
+
+                # Add the tool information to the list
+                tool_entry = {
+                    "agent": cls.agent_name,  # Use HR agent type
+                    "function": name,
+                    "description": description,
+                    "arguments": json.dumps(args_dict).replace('"', "'"),
+                }
+
+                tools_list.append(tool_entry)
+
+        # Return the JSON string representation
+        return json.dumps(tools_list, ensure_ascii=False)
+
+    # This function does NOT have the kernel_function annotation
+    # because it's meant for introspection rather than being exposed as a tool
+    @classmethod
+    def get_all_kernel_functions(cls) -> dict[str, Callable]:
+        """
+        Returns a dictionary of all methods in this class that have the @kernel_function annotation.
+        This function itself is not annotated with @kernel_function.
+
+        Returns:
+            Dict[str, Callable]: Dictionary with function names as keys and function objects as values
+        """
+        kernel_functions = {}
+
+        # Get all class methods
+        for name, method in inspect.getmembers(cls, predicate=inspect.isfunction):
+            # Skip this method itself and any private/special methods
+            if name.startswith("_") or name == "get_all_kernel_functions":
+                continue
+
+            # Check if the method has the kernel_function annotation
+            # by looking at its __annotations__ attribute
+            method_attrs = getattr(method, "__annotations__", {})
+            if hasattr(method, "__kernel_function__") or "kernel_function" in str(
+                method_attrs
+            ):
+                kernel_functions[name] = method
+
+        return kernel_functions
