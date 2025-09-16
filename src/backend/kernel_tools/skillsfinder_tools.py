@@ -31,7 +31,7 @@ class SkillsfinderTools:
         ## Lisa Simpson
         - **Skills**: Network Administration, Cybersecurity, Cloud Computing
         - **Experience**: 7 years in IT infrastructure and security
-        - **Certifications**: CompTIA Security+, AWS Certified Solutions Architect
+        - **Certifications**: CompTIA Security+, Azure Certified Solutions Architect
 
         ## Bart Simpson
         - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
@@ -39,14 +39,14 @@ class SkillsfinderTools:
         - **Certifications**: ASE Certified, Certified Welder
 
         ## Marge Simpson
-        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Industrial Painting
         - **Experience**: 5 years in automotive and industrial equipment repair
-        - **Certifications**: ASE Certified, Certified Welder
+        - **Certifications**: ASE Certified
 
         ## Maggie Simpson
-        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
+        - **Skills**: Mechanical Repair, Automotive Maintenance, Electrical Systems
         - **Experience**: 5 years in automotive and industrial equipment repair
-        - **Certifications**: ASE Certified, Certified Welder
+        - **Certifications**: ASE Certified, Certified Electrician
 
         ## Ned Flanders
         - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
@@ -54,9 +54,9 @@ class SkillsfinderTools:
         - **Certifications**: ASE Certified, Certified Welder
 
         ## Mr. Burns
-        - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
-        - **Experience**: 5 years in automotive and industrial equipment repair
-        - **Certifications**: ASE Certified, Certified Welder
+        - **Skills**: Financial Analysis, Investment Strategies, Risk Management
+        - **Experience**: 30 years in finance and investment
+        - **Certifications**: CFA, CPA
 
         ## Smithers
         - **Skills**: Mechanical Repair, Automotive Maintenance, Welding
@@ -64,7 +64,7 @@ class SkillsfinderTools:
         - **Certifications**: ASE Certified, Certified Welder
 
         """
-        return f"Here is information to relay back to the user. Repeat back all the relevant sections that the user asked for: {product_info}."
+        return f"Here is information to relay back to the user. Repeat back all the relevant sections that the user asked for: {skills_info}."
 
 
     @classmethod

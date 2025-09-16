@@ -12,7 +12,7 @@ class SkillsfinderAgent(BaseAgent):
     """Skillsfinder agent implementation using Semantic Kernel.
 
     This agent specializes in finding the right person for the task, based on the persons skills and expertise.
-    
+
     """
 
     def __init__(
