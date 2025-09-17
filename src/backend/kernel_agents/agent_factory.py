@@ -19,6 +19,7 @@ from kernel_agents.marketing_agent import MarketingAgent
 from kernel_agents.planner_agent import PlannerAgent  # Add PlannerAgent import
 from kernel_agents.procurement_agent import ProcurementAgent
 from kernel_agents.product_agent import ProductAgent
+from kernel_agents.skillsfinder_agent import SkillsfinderAgent
 from kernel_agents.tech_support_agent import TechSupportAgent
 from models.messages_kernel import AgentType, PlannerResponsePlan
 # pylint:disable=E0611
@@ -35,6 +36,7 @@ class AgentFactory:
         AgentType.HR: HrAgent,
         AgentType.MARKETING: MarketingAgent,
         AgentType.PRODUCT: ProductAgent,
+        AgentType.SKILLSFINDER: SkillsfinderAgent,
         AgentType.PROCUREMENT: ProcurementAgent,
         AgentType.TECH_SUPPORT: TechSupportAgent,
         AgentType.GENERIC: GenericAgent,
@@ -48,6 +50,7 @@ class AgentFactory:
         AgentType.HR: AgentType.HR.value,
         AgentType.MARKETING: AgentType.MARKETING.value,
         AgentType.PRODUCT: AgentType.PRODUCT.value,
+        AgentType.SKILLSFINDER: AgentType.SKILLSFINDER.value,
         AgentType.PROCUREMENT: AgentType.PROCUREMENT.value,
         AgentType.TECH_SUPPORT: AgentType.TECH_SUPPORT.value,
         AgentType.GENERIC: AgentType.GENERIC.value,
@@ -61,6 +64,7 @@ class AgentFactory:
         AgentType.HR: HrAgent.default_system_message(),
         AgentType.MARKETING: MarketingAgent.default_system_message(),
         AgentType.PRODUCT: ProductAgent.default_system_message(),
+        AgentType.SKILLSFINDER: SkillsfinderAgent.default_system_message(),
         AgentType.PROCUREMENT: ProcurementAgent.default_system_message(),
         AgentType.TECH_SUPPORT: TechSupportAgent.default_system_message(),
         AgentType.GENERIC: GenericAgent.default_system_message(),

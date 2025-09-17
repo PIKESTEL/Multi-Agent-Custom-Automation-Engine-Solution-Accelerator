@@ -69,9 +69,9 @@ class SkillsfinderAgent(BaseAgent):
         cls,
         **kwargs: Dict[str, str],
     ) -> None:
-        """Asynchronously create the PlannerAgent.
+        """Asynchronously create the SkillsfinderAgent.
 
-        Creates the Azure AI Agent for planning operations.
+        Creates the Azure AI Agent for skills finding operations.
 
         Returns:
             None
